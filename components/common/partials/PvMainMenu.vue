@@ -36,24 +36,24 @@
         <ul class="menu main-menu menu-arrow">
 			<li>
 				<nuxt-link
-					to="/shop"
+					to="/"
 					class="sub-menu-link menu-with-ul"
-					:class="{active: $route.path.indexOf('/shop') > -1}"
+					:class="{active: $route.path.indexOf('/page') > -1}"
 				>Flyers & Deals</nuxt-link>
 			</li>
 
 			<li>
 				<nuxt-link
-					to="/product/default/integrali-tusilli"
+					to="/shop"
 					class="sub-menu-link menu-with-ul"
-					:class="{active: $route.path.indexOf('/product') > -1}"
+					:class="{active: $route.path.indexOf('/shop') <-1 }"
 				>My Shop</nuxt-link>
 			</li>
 
 			<li>
 				<nuxt-link
-					to="/pages/blog"
-					:class="{active: $route.path.indexOf('/pages/blog') > -1}"
+					to="/shop/brand/"
+					:class="{active: $route.path.indexOf('/shop/brand/') <-1 }"
 				>Brands</nuxt-link>
 			</li>
 		</ul>

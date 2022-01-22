@@ -109,12 +109,10 @@
 							alt="Porto Logo"
 							class="w-100"
 						/>-->
-                        <img
+                        <img class="logo-main"
 							src="~/static/images/shubnam.png"
-							width="101"
-							height="40"
 							alt="Porto Logo"
-							class="w-100"
+							
 						/>
 					</nuxt-link>
 
@@ -210,3 +208,10 @@ export default {
 	}
 };
 </script>
+<style>
+.logo-main {
+  height: 70px !important;
+  width: 212px !important;
+  max-width: initial;
+}
+</style>

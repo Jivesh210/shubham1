@@ -42,12 +42,12 @@
 						<div class="widget mb-3">
 							<h4 class="widget-title">More Information</h4>
 
-							<ul class="links">
+							<!-- <ul class="links">
 								<li><a href="javascript:;">Affiliates</a></li>
 								<li><a href="javascript:;">Refer a Friend</a></li>
 								<li><a href="javascript:;">Student Beans Offers</a></li>
 								<li><a href="javascript:;">Gift Vouchers</a></li>
-							</ul>
+							</ul> -->
 						</div>
 					</div>
 
@@ -78,7 +78,7 @@
 							<h4 class="widget-title">Payment Methods</h4>
 
 							<img
-								src="~/static/images/home/payment.png"
+								src="~/static/images/home/payment.0cfb6ee.png"
 								alt="payment"
 								width="240"
 								height="32"

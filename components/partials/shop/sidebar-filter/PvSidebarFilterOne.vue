@@ -53,13 +53,15 @@
 				>PRODUCT CATEGORIES</a>
 			</h3>
 			<vue-slide-toggle :open="catOpened">
-				<div class="widget-body pb-0">
-					<ul class="cat-list">
-						<li
-							v-for=" list in categoryList"	:key="list.id"				
+				<div class="widget-body pb-0" >
+					<ul class="cat-list"  >
+						<div  >
+						<li v-for=" list in categoryList"	:key="list.id"
 							:class="{active: isActivedBrand(list.id)}"	>
-							<nuxt-link v-if="!list.parent_cat" :to="{path: '/shop/cat/'+list.cat_name+'/'+list.id}">{{list.cat_name +' '+'('+list.product_relation.length+')'}}</nuxt-link>
+							<a href="javascript:;" @click="subcategory(list.id)" v-if="!list.parent_cat"	>{{list.cat_name +' '+'('+list.product_relation.length+')'}}</a>
 						</li>
+						
+						</div>
 					</ul>
 				</div>
 			</vue-slide-toggle>
@@ -166,7 +168,7 @@ import PvCarousel from '~/components/features/PvCarousel';
 import PvSmallProduct from '~/components/features/product/PvSmallProduct';
 import { shopColors, shopSizes, shopBrands } from '~/utils/data/shop';
 import { baseSlider1 } from '~/utils/data/carousel';
-
+import Api, { baseUrl } from '~/api';
 export default {
 	components: {
 		VueSlideToggle,
@@ -275,6 +277,18 @@ export default {
 		}
 	},
 	methods: {
+		subcategory(id){
+			Api.get( `${ baseUrl }/search-category`,{
+				params: {
+					id: 1,
+				}
+			} )
+			.then(response => {
+				
+		
+				
+		})
+		},
 		colorFilterRoute: function ( item ) {
 			let selectedColors = this.$route.query.color
 				? this.$route.query.color.split( ',' )
