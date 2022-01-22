@@ -1,5 +1,5 @@
 export default {
-    target:'static',
+    
     head: {
         titleTemplate: 'Shubham Grocery',
         title: 'Shubham Grocery',
@@ -115,10 +115,6 @@ export default {
         linkActiveClass: '',
         linkExactActiveClass: 'active'
     },
-
-    // build: {
-    //     publicPath: "http://d-themes.com/vue/porto/demo-35/"
-    // },
 
     generate: {
         subFolders: false,
