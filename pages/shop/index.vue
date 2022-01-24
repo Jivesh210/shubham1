@@ -37,7 +37,7 @@
 							:categoryList="categoryList"
 							:featuredProducts="featuredProducts"
 							:brand="cat"
-							:brands="brand"
+							:brands="brands"
 						></pv-sidebar-filter-one>
 
 					
@@ -71,7 +71,7 @@ export default {
 			categoryList: [],
 			featuredProducts: [],
 			cat:[],
-			brand:[],
+			brands:[],
 			
 			isSticky: false
 		};
@@ -92,10 +92,11 @@ export default {
 	methods: {
 		query(){
 		
-			Api.get(`${ baseUrl }/product_show`)
+			Api.get(`${ baseUrl }/product-show`)
 				.then( response => {
 
-					this.featuredProducts= response.data;
+					this.featuredProducts= response.data.product;
+					this.brands= response.data.brand
 					
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );

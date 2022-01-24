@@ -15,9 +15,9 @@
 						class="row position-relative"
 						v-if="products.length === 0"
 					>
-						<pv-carousel
-							class="products-slider nav-outer w-100"
-							:options="productSlider"
+						<!-- <pv-carousel
+							class=" nav-outer w-100"
+							
 						>
 							<div
 								class="product-loading-overlay swiper-slide"
@@ -25,7 +25,7 @@
 								:key="'special-skel-' + index"
 							>
 							</div>
-						</pv-carousel>
+						</pv-carousel> -->
 					</div>
 
 					<div
@@ -33,8 +33,8 @@
 						v-if="products.length > 0"
 					>
 						<pv-carousel
-							class="products-slider nav-outer w-100"
-							
+							class="special-products nav-outer w-100"
+							:options="specialSlider"
 						>
 							<div
 								class="swiper-slide"

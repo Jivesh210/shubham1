@@ -18,10 +18,17 @@
 					<div class="product-category bg-white" v-if="cat.parent_cat == 0"> 
 						<nuxt-link :to="{path: '/shop', query: {categories: cat.id}}">
 							<figure ><img
+									v-if="cat.cat_img !=null"
 									:src="cat.cat_img"
 									alt="cat"
 									width="341"
-									height="200" style="filter: brightness(50%) !important;"></figure>	
+									height="200" style="filter: brightness(50%) !important;">
+								
+									<img v-else
+									src="~/static/images/31638466.jpg"
+									 style="filter: brightness(50%) !important;"	
+									 />	
+									</figure>	
 							<div class="category-content">
 								<h3 class="font2 ls-n-25 text-white">{{cat.cat_name}}</h3>
 								<span class="font2 ls-n-20 text-white" >{{cat.product_relation.length}} products</span>
@@ -47,38 +54,31 @@
 					
                     <pv-tabs class="nav nav-tabs border-0 px-4 pb-0 m-b-3" >
 						
-							<li class="nav-item">
+							<li class="nav-item" @click="mostallpopular()" >
+								
 							<a
 							:class="brandid?'nav-link mr-3':'nav-link active mr-3'"
-							@click="mostallpopular()"
+							
+							data-toggle="tab"
+							href="#all"
 							>View All</a>
 						</li>
 						<div v-for="(brand, index) in brands" :key="index" >
-						<li class="nav-item" >
+						<li class="nav-item" @click="mostpopular(brand.id)" >
 							<a	
-								:class="brandid == brand.brand.id?'nav-link active mr-3':'nav-link mr-3'"
-								@click="mostpopular(brand.brand.id)"
-							> {{ brand.brand.brand_name }} </a>
+								:class="brandid == brand.id?'nav-link active mr-3':'nav-link mr-3'"
+								data-toggle="tab"	
+								href="#too"
+							> {{ brand.brand_name }} </a>
 						</li>
 						 </div>
 					</pv-tabs>
-				 <div v-if="change"
-						class="tab-content"	
+				 <div
 					>
 						<div 
 							class="tab-pane fade show active popular-products swiper-theme swiper-slide"
-							id="too"						
+							id="all"						
 						>
-							<pv-carousel 		
-								class="products-slider nav-outer"
-							>
-									<div 
-									v-for="(product, index) in brands" :key="index" 
-									class="swiper-slide"
-									>
-									<pv-product-one :product="product" ></pv-product-one>
-								</div>
-							</pv-carousel>
 							<div class="swiper-nav">  
 								<button
 									type="button"
@@ -97,9 +97,9 @@
 								</button>
 							</div>
 						</div>
+
 					</div>
-					 <div v-if="!change"
-						class="tab-content"	
+					 <div 
 					>
 						<div 
 							class="tab-pane fade show active popular-products swiper-theme swiper-slide"
@@ -107,10 +107,12 @@
 						>
 							<pv-carousel 		
 								class="products-slider nav-outer"
+								:options="popularSlider"
 							>
 									<div 
-									v-for="(product, index) in productbyid" :key="index" 
+									v-for="product in productbyid" :key="'too-' + product.product.product_name" 
 									class="swiper-slide"
+									
 									>
 									<pv-product-one :product="product" ></pv-product-one>
 								</div>
@@ -167,25 +169,25 @@ export default {
 		change:true,
 		productbyid:[],
 		brandid:null,
-		backendUrl:backendUrl
+		backendUrl:backendUrl,
+		popularSlider:popularSlider
 
 		}
 	},
 	mounted (){
-
-		// this.pro()
+		this.mostallpopular()
+		
 	},
 	methods:{
 	
-	mostpopular(id){
+	mostpopular(id){	
 		this.brandid=id
-		Api.get( `${ baseUrl }/product_show_byid/${id}`)
+		Api.get( `${ baseUrl }/product-showbyid/${id}`)
 		.then(response => {
 				
 			this.productbyid =response.data.product	
 			this.change=false;
 			
-			// console.log(response.data)
 				
 		})
 		
@@ -194,6 +196,15 @@ export default {
 	mostallpopular(){
 		this.brandid=null
 		this.change=true;
+		Api.get( `${ baseUrl }/product-show`)
+		.then(response => {
+				
+			this.productbyid =response.data.product	
+			this.change=false;
+			
+			// console.log(response.data)
+				
+		})
 	}
 }	
 	

@@ -1,6 +1,5 @@
 <template>
 	<div class="product-default inner-quickview inner-icon"  v-if="product.product && product.product.id" >
-		
 		<figure>
 			<nuxt-link :to="`/product/default/${product.product.id}`">
 				<img

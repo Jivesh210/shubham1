@@ -8,7 +8,7 @@
 			:brands="brands"
 		></pv-popular-collection>
 
-		<pv-special-collection :products="brands"></pv-special-collection>
+		<pv-special-collection :products="products" ></pv-special-collection>
 
 		<!-- <pv-brand-section></pv-brand-section> -->
 
@@ -82,10 +82,11 @@ export default {
 		}
 	},
 	mounted: function () {
-		Api.get( `${ baseUrl }/product_show` )
+		Api.get( `${ baseUrl }/product-show` )
 			.then(response => {
 				
-			this.brands =response.data	
+			this.brands =response.data.brand	
+			this.products= response.data.product
 				
 		})
 				// this.posts = response.data.posts;

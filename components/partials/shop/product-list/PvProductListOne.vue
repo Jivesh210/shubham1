@@ -183,7 +183,7 @@
 			:class="{'row-sm sm-padding': itemsPerRow > 6}"
 			
 		>
-			<template v-if="product && product.length > 0">
+			<template v-if="product && product.length > 0">		
 				<div
 					:class="gridCols[itemsPerRow]"
 					v-for="(pro,index) in product"
@@ -192,21 +192,20 @@
 					<template v-if="type !== 'list'">
 						
 						<pv-product-one
-							v-if="brand"
+							v-if="product"
 							:product="pro"
 							:is-actions="false"
 							:brands="brand"
 							key="gridType"
 						></pv-product-one>
 						
-					
-						
 					</template>
 
 					<pv-product-two
+						
 						:product="pro"
 						v-else
-					></pv-product-two>
+					>{{pro}}</pv-product-two>
 				</div>
 			</template>
 

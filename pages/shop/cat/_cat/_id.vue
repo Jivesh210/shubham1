@@ -17,7 +17,7 @@
 
 			<div class="row">
 				<div class="col-lg-9 main-content">
-					<pv-product-list-one :product="featuredProducts" :brand="cat"> </pv-product-list-one>
+					<pv-product-list-one :product="featuredProducts" :brand="brand"> </pv-product-list-one>
 				</div>
 
 				<div
@@ -92,16 +92,16 @@ export default {
 		query(){
 			if(this.$route.params.cat)
 		{
-			Api.get(`${ baseUrl }/product_show?id=${this.$route.params.id}&category=${this.$route.params.cat}` )
+			Api.get(`${ baseUrl }/product-show?id=${this.$route.params.id}&category=${this.$route.params.cat}` )
 				.then( response => {
 					this.featuredProducts= response.data.products;
-					this.cat= response.data.cat
+					// this.cat= response.data.cat
 					this.brand= response.data.brand
 					
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
 		}else{
-			Api.get(`${ baseUrl }/product_show`)
+			Api.get(`${ baseUrl }/product-show`)
 				.then( response => {
 
 					this.featuredProducts= response.data;

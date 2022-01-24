@@ -52,7 +52,7 @@
 			class="product-desc"
 			v-if="product.productdescription"
 		>
-			<p>{{ product.productdescription }}</p>
+			<span v-html="product.productdescription"></span>
 		</div>
 		<ul class="single-info-list">
 			<li v-if="product.productsku">

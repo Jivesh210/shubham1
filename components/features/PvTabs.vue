@@ -16,15 +16,15 @@ export default {
 				target.classList.add( 'active' );
 
 				// active tab-pane
-				let tabPane = document.querySelector( target.getAttribute( 'href' ) );
+				// let tabPane = document.querySelector( target.getAttribute( 'href' ) );
 
-				tabPane.parentNode.querySelector( '.tab-pane.show' ).classList.remove( 'show' );
-				tabPane.classList.add( 'show' );
+				// tabPane.parentNode.querySelector( '.tab-pane.show' ).classList.remove( 'show' );
+				// tabPane.classList.add( 'show' );
 
-				setTimeout( () => {
-					tabPane.parentNode.querySelector( '.tab-pane.active' ).classList.remove( 'active' );
-					tabPane.classList.add( 'active' );
-				}, 150 );
+				// setTimeout( () => {
+				// 	tabPane.parentNode.querySelector( '.tab-pane.active' ).classList.remove( 'active' );
+				// 	tabPane.classList.add( 'active' );
+				// }, 150 );
 			}
 		}
 	}

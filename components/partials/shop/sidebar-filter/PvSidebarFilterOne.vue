@@ -55,23 +55,26 @@
 			<vue-slide-toggle :open="catOpened">
 				<div class="widget-body pb-0" >
 					<ul class="cat-list"  >
-						<div  >
-						<li v-for=" list in categoryList"	:key="list.id"
-							:class="{active: isActivedBrand(list.id)}"	>
-							<a href="javascript:;" @click="subcategory(list.id)" v-if="!list.parent_cat"	>{{list.cat_name +' '+'('+list.product_relation.length+')'}}</a>
+						<div v-for=" list,index in categoryList"	:key="index" >
+						<li class="mb-1" @click="subcategory(list.id)"
+								>
+							<a href="javascript:;"  data-toggle="collapse" v-if="!list.parent_cat"	>{{list.cat_name +' '+'('+list.product_relation.length+')'}}</a>
 						</li>
-						
+						<div v-if="subcat">
+						<div v-for=" showsub in sub"	:key="showsub.id"  >
+					<ul class="cat-list">
+					<li class=" ml-5 mb-1">	
+				<nuxt-link   v-if="showsub.parent_cat === list.id"  :to="{path: '/shop/cat/'+showsub.cat_slug+'/'+showsub.id}" >{{showsub.cat_name}}</nuxt-link>	
+			</li>
+		</ul>
+		</div> 
+						</div>
+		
 						</div>
 					</ul>
 				</div>
 			</vue-slide-toggle>
-		<!-- <div v-for=" list in categoryList"	:key="list.id" >
-			<ul class="cat-list">
-				<li class="mt-2">	
-	<nuxt-link  v-if="!list.parent_cat" :to="list.cat_name"  >{{list.cat_name +' '+'('+list.product_relation.length+')'}}</nuxt-link>	
-			</li>
-		</ul>
-		</div>  -->
+		
 		</div>
 		<!-- <vue-slide-toggle :open="!isEmptyQuery">
 			<div class="widget">
@@ -92,7 +95,8 @@
 			</h3>
 
 			<vue-slide-toggle :open="brandOpened" >
-				<div class="widget-body pb-0" v-if="brands.length==0">
+			
+				<!-- <div class="widget-body pb-0" v-if="brands.length==0">
 				
 					<ul class="cat-list" >			
 							<li v-for=" (list,index) in featuredProducts" :key="index"		
@@ -100,17 +104,17 @@
 							<nuxt-link else :to="{path: '/shop/brand/'+list.brand.brand_name+'/'+list.brand.id}">{{list.brand.brand_name }}</nuxt-link> 
 						</li>  
 					</ul>
-				</div>
-				<div class="widget-body pb-0" v-else>
+				</div> -->
+				<div class="widget-body pb-0" >
 					<ul class="cat-list" >
 							<li 	v-for=" list in brands" :key="list.id" 	
 							 		:class="{active: isActivedBrand(list.brand_name)}"	>
-							<nuxt-link  :to="{path: '/shop/brand/'+list.brand_name+'/'+list.id}">{{list.brand_name }}</nuxt-link> 
+							<nuxt-link  :to="{path: '/shop/brand/'+list.slug+'/'+list.id}">{{list.brand_name }}</nuxt-link> 
 						</li>  
 
 					</ul>
 
-				</div>
+				</div> 
 				
 			</vue-slide-toggle>
 		</div>
@@ -185,6 +189,7 @@ export default {
 	data: function () {
 		return {
 			catOpened: true,
+			subcat:false,
 			priceOpenened: true,
 			brandOpened: true,
 			sizeOpened: true,
@@ -203,6 +208,7 @@ export default {
 					'to': Number
 				}
 			},
+			sub:[],
 			shopColors: shopColors,
 			shopSizes: shopSizes,
 			baseSlider1: baseSlider1,
@@ -214,10 +220,10 @@ export default {
 		};
 	},
 	mounted(){
-			
-	
+		
 	},
 	watch: {
+		
 		$route: function () {
 			this.getFlag();
 
@@ -241,7 +247,7 @@ export default {
 	},
 	created: function () {
 		this.getFlag();
-
+	
 		if ( this.$route.query.min_price ) {
 			this.prices = [
 				this.$route.query.min_price,
@@ -278,16 +284,18 @@ export default {
 	},
 	methods: {
 		subcategory(id){
-			Api.get( `${ baseUrl }/search-category`,{
-				params: {
-					id: 1,
-				}
-			} )
-			.then(response => {
-				
 		
-				
-		})
+			this.subcat = !this.subcat
+
+			this.sub=[];
+				for( var key in this.categoryList){
+					if(this.categoryList[key].parent_cat===id){
+						
+						this.sub.push(this.categoryList[key])
+					}
+					
+				}
+	
 		},
 		colorFilterRoute: function ( item ) {
 			let selectedColors = this.$route.query.color
