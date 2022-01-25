@@ -8,15 +8,16 @@
 					
 				/>
 			</nuxt-link>
-
+				
 			<div class="product-countdown-container">
 				<span class="product-countdown-title">offer ends
 					in:</span>
 
 				<pv-count-down
-					until="2021-10-05"
+					until="2022-10-05"
 					:compact="true"
 				></pv-count-down>
+				
 			</div>
 		</figure>
 
@@ -30,13 +31,14 @@
 					<template v-if="index < product[0].product.product_categories.length - 1">,</template>
 				</span>
 			</div>
-
+				{{product[0].product.product_name}}
 			<h3 class="product-title">
-				<nuxt-link :to="'/product/default/' + product[0].product.slug">{{ product[0].product.name }}</nuxt-link>
+				<nuxt-link :to="'/product/default/' + product[0].product.slug">{{product[0].product.product_name}}</nuxt-link>
 			</h3>
-
+				
 			<div class="ratings-container">
 				<div class="product-ratings">
+					
 					<span
 						class="ratings"
 						:style="{width: product.ratings * 20 + '%'}"
@@ -198,7 +200,7 @@ export default {
 			e.currentTarget.classList.add( 'load-more-overlay', 'loading' );
 
 			setTimeout( () => {
-				this.addToWishlist( { product: this.product } );
+				this.addToWishlist( { product: this.product[0] } );
 				document
 					.querySelector( '.wishlist-popup' )
 					.classList.add( 'active' );
@@ -211,10 +213,10 @@ export default {
 			}, 1000 );
 		},
 		addCart: function () {
-			if ( this.product.stock > 0 ) {
-				let saledProduct = { ...this.product };
-				if ( this.product.is_sale ) {
-					saledProduct.price = this.product.sale_price;
+			if ( this.product[0].product.qty > 0 ) {
+				let saledProduct = { ...this.product[0] };
+				if ( this.product[0].product.pricesale ) {
+					saledProduct.price = this.product[0].product.pricesale;
 				}
 
 				this.addToCart( { product: saledProduct } );

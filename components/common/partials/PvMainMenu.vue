@@ -17,7 +17,7 @@
 										> {{child_cat.cat_name}} </nuxt-link>
 										<ul class="submenu">
 											<li class="submenu" v-for="child in child_cat.childcategory.slice(0,6)" :key="child.id">
-												<nuxt-link :to="{path: '/shop/cat/'+child.cat_name+'/'+child.id}">{{child.cat_name}}</nuxt-link>
+												<nuxt-link :to="{path: '/shop/cat/'+child.cat_slug}">{{child.cat_name}}</nuxt-link>
 											</li>
 										</ul>
 			
@@ -107,7 +107,7 @@ export default {
 		},
 		getchild_categories(id){
 	
-			Api.get( `${ baseUrl }/child_category/`+id )
+			Api.get( `${ baseUrl }/child-category/`+id )
 							.then( response => {
 								this.menuOneSlider = response.data
 								this.nav=true;

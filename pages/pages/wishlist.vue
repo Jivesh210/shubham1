@@ -22,12 +22,12 @@
 				<h1>Wishlist</h1>
 			</div>
 		</div>
-
 		<div class="container">
 			<div
 				class="cart-message carted"
 				style="display: none"
 			>
+			
 				<strong
 					class="single-cart-notice"
 					v-if="currentProduct"
@@ -73,29 +73,47 @@
 						
 							<td>
 								<figure class="product-image-container">
-									<nuxt-link
-										:to="'/product/default/' + product.producteditid"
+									<nuxt-link v-if="product.productfeatureimage"
+										:to="'/product/' + product.productslug"
 										class="product-image"
 									>
 										<img
 											:src="`${backendUrl}${product.productfeatureimage}`"
 											alt="product"
-											:width="product.width"
-											:height="product.height"
+											:width="product.productfeatureimage.width"
+											:height="product.productfeatureimage.height"
+										/>
+									</nuxt-link>
+									<nuxt-link v-else
+										:to="'/product/' + product.slug"
+										class="product-image"
+									>
+										<img
+											:src="`${backendUrl}${product.product.image}`"
+											alt="product"
+											:width="product.product.image.width"
+											:height="product.product.image.height"
 										/>
 									</nuxt-link>
 
-									<a
+									<a v-if="product.productname"
 										href="javascript:;"
 										class="btn-remove icon-cancel"
 										title="Remove Product"
 										@click="removeWishlist(product.productname)"
 									></a>
+									<a v-else
+										href="javascript:;"
+										class="btn-remove icon-cancel"
+										title="Remove Product"
+										@click="removeWishlist(product.product.product_name)"
+									></a>
 								</figure>
 							</td>
 							<td>
 								<h5 class="product-title">
-									<nuxt-link :to="'/product/default/' + product.producteditid">{{ product.productname }}</nuxt-link>
+									<nuxt-link v-if="product.productname" :to="'/product/' + product.productslug">{{ product.productname }}</nuxt-link>
+									<nuxt-link v-else :to="'/product/' + product.product.slug">{{ product.product.product_name }}</nuxt-link>
 								</h5>
 							</td>
 							<td
@@ -117,21 +135,32 @@
 								class="price-box"
 								v-else
 							>
-								<template v-if="product.minPrice !== product.maxPrice">
-									<span class="new-price">${{ product.minPrice | priceFormat }} &ndash; ${{ product.maxPrice | priceFormat }}</span>
+								<template v-if="!product.product.pricesale">
+									<span class="new-price">${{ product.product.price | priceFormat }}</span>
 								</template>
 
 								<template v-else>
-									<span class="new-price">${{ product.minPrice | priceFormat }}</span>
+									<span class="new-price">${{ product.product.pricesale | priceFormat }}</span>
+									<span class="old-price">${{ product.product.price | priceFormat }}</span>
 								</template>
 							</td>
-
-							<td v-if="product.productquantity">
+							<div v-if="product.productpricesale">
+							<td v-if="product.productquantity>0">
 								<span class="stock-status">In stock</span>
 							</td>
 							<td v-else>
 								<span class="stock-status">Out of stock</span>
 							</td>
+							</div>
+							<div v-else>
+								
+								<td v-if=" product.product.qty>0">
+								<span class="stock-status">In stock</span>
+							</td>
+							<td v-else>
+								<span class="stock-status">Out of stock</span>
+							</td>	
+							</div>
 							<td class="action">
 								<a
 									href="javascript:;"

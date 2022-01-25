@@ -40,14 +40,25 @@
 							
 									<td>
 										<figure class="product-image-container">
-											<nuxt-link
-												:to="'/product/default/' + product.producteditid"
+											<nuxt-link v-if="product.productfeatureimage"
+												:to="'/product/' + product.productslug"
 												class="product-image"
 											>
 												<img
 													:src="`${backendUrl}${product.productfeatureimage}`"
 													:width="product.productfeatureimage.width"
 													:height="product.productfeatureimage.height"
+													alt="product"
+												/>
+											</nuxt-link>
+											<nuxt-link v-else
+												:to="'/product/' + product.product.slug"
+												class="product-image"
+											>
+												<img
+													:src="`${backendUrl}${product.product.image}`"
+													:width="product.product.image.width"
+													:height="product.product.image.height"
 													alt="product"
 												/>
 											</nuxt-link>
@@ -63,7 +74,8 @@
 
 									<td class="product-col">
 										<h5 class="product-title">
-											<nuxt-link :to="'/product/default/' + product.producteditid">{{ product.productname }}</nuxt-link>
+											<nuxt-link v-if="product.productname" :to="'/product/' + product.productslug">{{ product.productname }}</nuxt-link>
+											<nuxt-link v-else :to="'/product/' + product.product.slug">{{ product.product.product_name }}</nuxt-link>
 										</h5>
 									</td>
 

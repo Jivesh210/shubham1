@@ -1,7 +1,7 @@
 <template>
 	<div class="product-default inner-quickview inner-icon"  v-if="product.product && product.product.id" >
 		<figure>
-			<nuxt-link :to="`/product/default/${product.product.id}`">
+			<nuxt-link :to="`/product/${product.product.slug}`">
 				<img
 					v-lazy="`${backendUrl}${product.product.image}`"
 					
@@ -34,13 +34,13 @@
 		<div class="product-details">
 	
 			<div class="category-wrap">
-			
-				<div v-if="brands"
+				
+				<div v-if="product.category"
 					class="category-list"
 				>
-					<span v-for="brand in brands" :key="brand.id"	
+					<span 	
 					>	
-						<template >{{brand.cat_name}}</template>
+						<template >{{product.category.cat_name}}</template>
 					</span>	
 				</div>
 			<div v-else>
@@ -52,7 +52,7 @@
 			</div>
 			<div class="title-wrap">
 				<h3 class="product-title">
-					<nuxt-link :to="'/product/default/' + product.product.id">{{ product.product.product_name }}</nuxt-link>
+					<nuxt-link :to="`/product/${product.product.slug}`">{{ product.product.product_name }}</nuxt-link>
 				</h3>
 			</div>
 			<div

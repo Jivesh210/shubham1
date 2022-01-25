@@ -14,17 +14,28 @@
 					<figure class="product-media">
 						<nuxt-link :to="'/product/default' + props.item.data.slug">
 							<img 
+							v-if="props.item.data.productfeatureimage"
 								:src="`${backendUrl}${props.item.data.productfeatureimage}`" 
 								alt="product" 
 								:width="props.item.data.productfeatureimage.width"
 								:height="props.item.data.productfeatureimage.height"
 							>
+								<img 
+								v-else
+								:src="`${backendUrl}${props.item.data.product.image}`" 
+								alt="product" 
+								:width="props.item.data.product.image.width"
+								:height="props.item.data.product.image.height"
+							>
 						</nuxt-link>
 					</figure>
 
 					<div class="product-detail">
-						<nuxt-link :to="'/product/default/' + props.item.data.slug" class="product-name">
+						<nuxt-link v-if="props.item.data.productname" :to="'/product/default/' + props.item.data.slug" class="product-name">
 							{{ props.item.data.productname }}
+						</nuxt-link>
+						<nuxt-link v-else :to="'/product/default/' + props.item.data.product.slug" class="product-name">
+							{{ props.item.data.product.product_name }}
 						</nuxt-link>
 
 						<p>{{ props.item.text }}</p>

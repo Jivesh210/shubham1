@@ -17,7 +17,7 @@
 
 			<div class="row">
 				<div class="col-lg-9 main-content">
-					<pv-product-list-one :product="featuredProducts" :brand="cat"> </pv-product-list-one>
+					<pv-product-list-one :product="featuredProducts" :brand="brand"> </pv-product-list-one>
 				</div>
 
 				<div
@@ -36,7 +36,7 @@
 							:categoryList="categoryList"
 							:featuredProducts="featuredProducts"
 							:brand="cat"
-							:brands="brands"
+							:brands="brand"
 						></pv-sidebar-filter-one>
 
 						
@@ -70,7 +70,7 @@ export default {
 			categoryList: [],
 			featuredProducts: [],
 			cat:[],
-			brands:[],
+			brand:[],
 			
 			isSticky: false
 		};
@@ -90,12 +90,13 @@ export default {
 	},
 	methods: {
 		query(){
-			if(this.$route.params.brand){
-				Api.get(`${ baseUrl }/product-showbyid/${this.$route.params.id}`)
+			if(this.$route.params.slug)
+		{
+			Api.get(`${ baseUrl }/product-show/${this.$route.params.slug}`)
 				.then( response => {
-
-					this.featuredProducts= response.data.product;
-					this.brands= response.data.brand
+					this.featuredProducts= response.data.products;
+					// this.cat= response.data.cat
+					this.brand= response.data.brand
 					
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
@@ -104,7 +105,7 @@ export default {
 				.then( response => {
 
 					this.featuredProducts= response.data;
-					this.brands =response.data.brand
+					
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
 		}	

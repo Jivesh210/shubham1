@@ -39,7 +39,8 @@
 							
 								<div class="product-details">
 									<h4 class="product-title">
-										<nuxt-link :to="'/product/default/' + product.producteditid">{{ product.productname }}</nuxt-link>
+										<nuxt-link v-if="product.productname" :to="'/product/' + product.productslug">{{ product.productname }}</nuxt-link>
+										<nuxt-link v-else :to="'/product/' + product.product.slug">{{ product.product.product_name }}</nuxt-link>
 									</h4>
 
 									<span class="cart-product-info">
@@ -49,15 +50,25 @@
 								</div>
 
 								<figure class="product-image-container">
-									<nuxt-link :to="'/product/default/' + product.producteditid">
+									<nuxt-link v-if="product.productfeatureimage" :to="'/product/' + product.productslug">
 										<img
+											
 											v-lazy="`${backendUrl}${product.productfeatureimage}`"
 											alt="product"
 											:width="product.productfeatureimage.width"
 											:height="product.productfeatureimage.height"
 										/>
+										
 									</nuxt-link>
-
+										<nuxt-link v-else :to="'/product/' + product.product.slug">
+									<img
+											
+											v-lazy="`${backendUrl}${product.product.image}`"
+											alt="product"
+											:width="product.product.image.width"
+											:height="product.product.image.height"
+										/>
+										</nuxt-link>
 									<a
 										href="javascript:;"
 										class="btn-remove"

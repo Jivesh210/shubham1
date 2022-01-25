@@ -58,13 +58,13 @@
 						<div v-for=" list,index in categoryList"	:key="index" >
 						<li class="mb-1" @click="subcategory(list.id)"
 								>
-							<a href="javascript:;"  data-toggle="collapse" v-if="!list.parent_cat"	>{{list.cat_name +' '+'('+list.product_relation.length+')'}}</a>
+							<a href="javascript:;"  data-toggle="collapse" v-if="!list.parent_cat"	>{{list.cat_name}}</a>
 						</li>
 						<div v-if="subcat">
 						<div v-for=" showsub in sub"	:key="showsub.id"  >
 					<ul class="cat-list">
 					<li class=" ml-5 mb-1">	
-				<nuxt-link   v-if="showsub.parent_cat === list.id"  :to="{path: '/shop/cat/'+showsub.cat_slug+'/'+showsub.id}" >{{showsub.cat_name}}</nuxt-link>	
+				<nuxt-link   v-if="showsub.parent_cat === list.id"  :to="{path: '/shop/cat/'+showsub.cat_slug}" >{{showsub.cat_name}}</nuxt-link>	
 			</li>
 		</ul>
 		</div> 
@@ -109,11 +109,11 @@
 					<ul class="cat-list" >
 							<li 	v-for=" list in brands" :key="list.id" 	
 							 		:class="{active: isActivedBrand(list.brand_name)}"	>
-							<nuxt-link  :to="{path: '/shop/brand/'+list.slug+'/'+list.id}">{{list.brand_name }}</nuxt-link> 
+							<nuxt-link  :to="{path: '/shop/brand/'+list.slug}">{{list.brand_name }}</nuxt-link> 
 						</li>  
 
 					</ul>
-
+	
 				</div> 
 				
 			</vue-slide-toggle>

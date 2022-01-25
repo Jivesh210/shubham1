@@ -15,7 +15,7 @@
 			>
 				
 				<div class="swiper-slide" v-for="cat in categories" :key="cat.id" >
-					<div class="product-category bg-white" v-if="cat.parent_cat == 0"> 
+					<div class="product-category bg-white" v-if="cat.parent_cat ===0"> 
 						<nuxt-link :to="{path: '/shop', query: {categories: cat.id}}">
 							<figure ><img
 									v-if="cat.cat_img !=null"
@@ -64,7 +64,7 @@
 							>View All</a>
 						</li>
 						<div v-for="(brand, index) in brands" :key="index" >
-						<li class="nav-item" @click="mostpopular(brand.id)" >
+						<li class="nav-item" @click="mostpopular(brand.slug,brand.id)" >
 							<a	
 								:class="brandid == brand.id?'nav-link active mr-3':'nav-link mr-3'"
 								data-toggle="tab"	
@@ -180,9 +180,9 @@ export default {
 	},
 	methods:{
 	
-	mostpopular(id){	
+	mostpopular(slug,id){	
 		this.brandid=id
-		Api.get( `${ baseUrl }/product-showbyid/${id}`)
+		Api.get( `${ baseUrl }/product-showbyid/${slug}`)
 		.then(response => {
 				
 			this.productbyid =response.data.product	

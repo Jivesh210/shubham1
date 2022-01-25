@@ -17,7 +17,7 @@
 
 			<div class="row">
 				<div class="col-lg-9 main-content">
-					<pv-product-list-one :product="featuredProducts" :brand="brand"> </pv-product-list-one>
+					<pv-product-list-one :product="featuredProducts" :brand="cat"> </pv-product-list-one>
 				</div>
 
 				<div
@@ -36,7 +36,7 @@
 							:categoryList="categoryList"
 							:featuredProducts="featuredProducts"
 							:brand="cat"
-							:brands="brand"
+							:brands="brands"
 						></pv-sidebar-filter-one>
 
 						
@@ -70,7 +70,7 @@ export default {
 			categoryList: [],
 			featuredProducts: [],
 			cat:[],
-			brand:[],
+			brands:[],
 			
 			isSticky: false
 		};
@@ -90,13 +90,12 @@ export default {
 	},
 	methods: {
 		query(){
-			if(this.$route.params.cat)
-		{
-			Api.get(`${ baseUrl }/product-show?id=${this.$route.params.id}&category=${this.$route.params.cat}` )
+			if(this.$route.params.slug){
+				Api.get(`${ baseUrl }/product-showbyid/${this.$route.params.slug}`,)
 				.then( response => {
-					this.featuredProducts= response.data.products;
-					// this.cat= response.data.cat
-					this.brand= response.data.brand
+
+					this.featuredProducts= response.data.product;
+					this.brands= response.data.brand
 					
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
@@ -104,8 +103,8 @@ export default {
 			Api.get(`${ baseUrl }/product-show`)
 				.then( response => {
 
-					this.featuredProducts= response.data;
-					
+					this.featuredProducts= response.data.product;
+					this.brands =response.data.brand
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
 		}	

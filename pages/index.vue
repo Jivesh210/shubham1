@@ -113,7 +113,7 @@ export default {
 			}
 		}, 10000 );
 
-		Api.get( `${ baseUrl }/category` )
+		Api.get( `${ baseUrl }/search-category` )
 		.then(res => {
 				this.category = res.data
 				// console.log(this.category)
