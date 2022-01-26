@@ -44,8 +44,9 @@
 									</h4>
 
 									<span class="cart-product-info">
+									
 										<span class="cart-product-qty">{{ product.qty }}</span>
-										× ${{ product.price | priceFormat }}
+										× ${{ product.product.price | priceFormat }}
 									</span>
 								</div>
 
@@ -60,6 +61,7 @@
 										/>
 										
 									</nuxt-link>
+									
 										<nuxt-link v-else :to="'/product/' + product.product.slug">
 									<img
 											

@@ -13,14 +13,15 @@
 				data-animation-delay="200"
 				v-animate
 			>
-				
 				<div class="swiper-slide" v-for="cat in categories" :key="cat.id" >
 					<div class="product-category bg-white" v-if="cat.parent_cat ===0"> 
 						<nuxt-link :to="{path: '/shop', query: {categories: cat.id}}">
-							<figure ><img
+							<figure >
+								
+								<img
 									v-if="cat.cat_img !=null"
-									:src="cat.cat_img"
-									alt="cat"
+									:src="`${cat.cat_img}`"
+									
 									width="341"
 									height="200" style="filter: brightness(50%) !important;">
 								

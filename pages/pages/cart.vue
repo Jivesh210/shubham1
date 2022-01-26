@@ -1,6 +1,7 @@
 <template>
 	<div class="main">
 		<div class="container">
+		
 			<ul class="checkout-progress-bar d-flex justify-content-center flex-wrap">
 				<li class="active">
 					<a href="javascript:;">Shopping Cart</a>

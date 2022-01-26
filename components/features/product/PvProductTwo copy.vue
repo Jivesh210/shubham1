@@ -11,75 +11,62 @@
 			<div class="label-group">
 				<div
 					class="product-label label-hot"
-				v-if="product.product.is_hot"
+					v-if="product.is_hot"
 				>HOT</div>
 				<div
 					class="product-label label-sale"
-					v-if="product.product.is_sale && !product.product.price"
+					v-if="product.is_sale && !product.price"
 				>Sale</div>
 				<div
 					class="product-label label-sale"
-					v-if="product.product.is_sale && product.product.price"
+					v-if="product.is_sale && product.price"
 				>{{ discount }}%</div>
 			</div>
 		</figure>
 
 		<div class="product-details">
-			
-<div class="category-wrap">
-				
-				<div v-if="product.category"
-					class="category-list"
+			<div class="category-list">
+				<span
+					v-for="(cat,index) in product.product_categories"
+					:key="`product-category-${index}`"
 				>
-					<span 	
-					>	
-						<template >{{product.category.cat_name}}</template>
-					</span>	
-				</div>
-			<div v-else>
-					{{product.brand.brand_name }}
-
+					<nuxt-link :to="{ path: '/shop', query: { category: cat.slug }}">{{ cat.name }}</nuxt-link>
+					<template v-if="index < product.product_categories.length - 1">,</template>
+				</span>
 			</div>
 
+			<h3 class="product-title">
+				<nuxt-link :to="'/product/default/' + product.slug">{{ product.name }}</nuxt-link>
+			</h3>
 
-			</div>
-			<div class="title-wrap">
-				<h3 class="product-title">
-					<nuxt-link :to="`/product/${product.product.slug}`">{{ product.product.product_name }}</nuxt-link>
-				</h3>
-			</div>
-
-			<div
-				class="ratings-container"
-				
-			>
+			<div class="ratings-container">
 				<div class="product-ratings">
 					<span
 						class="ratings"
-						:style="{width: product.product.ratings * 20 + '%'}"
+						:style="{width: product.ratings * 20 + '%'}"
 					></span>
-					<span class="tooltiptext tooltip-top">{{ product.product.ratings | priceFormat }}</span>
+					<span class="tooltiptext tooltip-top">{{ product.ratings | priceFormat }}</span>
 				</div>
 			</div>
 
 			<div
 				class="product-description"
-				v-if="product.product.short_description"
+				v-if="product.short_description"
 			>
-				<p class="mb-0" v-html="product.product.short_description"></p>
+				<p class="mb-0">{{ product.short_description }}</p>
 			</div>
 			<div
 				class="price-box"
-				v-if="product.product.price"
+				v-if="product.price"
 				key="singlePrice"
 			>
-				<template v-if="!product.product.pricesale">
-					<span class="product-price">${{ product.product.price | priceFormat }}</span>
+				<template v-if="!product.is_sale">
+					<span class="product-price">${{ product.price | priceFormat }}</span>
 				</template>
 
 				<template v-else>
-					<span class="old-price">${{ product.product.price | priceFormat }}</span>
-					<span class="product-price">${{ product.product.pricesale | priceFormat }}</span>
+					<span class="old-price">${{ product.price | priceFormat }}</span>
+					<span class="product-price">${{ product.sale_price | priceFormat }}</span>
 				</template>
 			</div>
 
@@ -97,20 +84,20 @@
 			</div>
 
 			<div class="product-action">
-				<!-- <nuxt-link
-					:to="'/product/default/' + product.product.slug"
+				<nuxt-link
+					:to="'/product/default/' + product.slug"
 					class="btn-icon btn-add-cart product-type-simple"
-					
+					v-if="product.variants.length > 0"
 					key="variantProduct"
 				>
 					<i class="fa fa-arrow-right"></i>
 					<span>SELECT OPTIONS</span>
-				</nuxt-link> -->
+				</nuxt-link>
 
 				<a
 					href="javascript:;"
 					class="btn-icon btn-add-cart product-type-simple"
-				
+					v-else
 					@click="addCart"
 				>
 					<i class="icon-shopping-cart"></i>
@@ -151,7 +138,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import { baseUrl,backendUrl } from '~/api';
+import { baseUrl } from '~/api';
 
 export default {
 	props: {
@@ -163,8 +150,7 @@ export default {
 			baseUrl: baseUrl,
 			minPrice: 0,
 			maxPrice: 0,
-			discount: 0,
-			backendUrl:backendUrl
+			discount: 0
 		};
 	},
 	computed: {
@@ -172,7 +158,7 @@ export default {
 		isWishlisted: function () {
 			if (
 				this.wishList.findIndex(
-					item => item.name === this.product.product.name
+					item => item.name === this.product.name
 				) > -1
 			)
 				return true;
@@ -180,22 +166,22 @@ export default {
 		}
 	},
 	mounted: function () {
-		if ( this.product.product.is_sale && this.product.product.price ) {
+		if ( this.product.is_sale && this.product.price ) {
 			this.discount =
-				( ( this.product.product.price - this.product.product.sale_price ) /
-					this.product.product.price ) *
+				( ( this.product.price - this.product.sale_price ) /
+					this.product.price ) *
 				100;
 			this.discount = parseInt( this.discount );
 		}
 
-		// if ( !this.product.product.price ) {
-		// 	this.minPrice = this.product.product.price;
-		// 	this.product.product.forEach( item => {
-		// 		let itemPrice = item.is_sale ? item.sale_price : item.price;
-		// 		if ( this.minPrice > itemPrice ) this.minPrice = itemPrice;
-		// 		if ( this.maxPrice < itemPrice ) this.maxPrice = itemPrice;
-		// 	} );
-		// }
+		if ( !this.product.price ) {
+			this.minPrice = this.product.variants[ 0 ].price;
+			this.product.variants.forEach( item => {
+				let itemPrice = item.is_sale ? item.sale_price : item.price;
+				if ( this.minPrice > itemPrice ) this.minPrice = itemPrice;
+				if ( this.maxPrice < itemPrice ) this.maxPrice = itemPrice;
+			} );
+		}
 	},
 	methods: {
 		...mapActions( 'wishlist', [ 'addToWishlist' ] ),
@@ -203,7 +189,7 @@ export default {
 		openQuickview: function () {
 			this.$modal.show(
 				() => import( '~/components/features/product/PvQuickview' ),
-				{ slug: this.product.product.slug },
+				{ slug: this.product.slug },
 				{ width: '931', height: 'auto', adaptive: true, class: 'quickview-modal' }
 			);
 		},
@@ -224,13 +210,12 @@ export default {
 			}, 1000 );
 		},
 		addCart: function () {
-			
-			if ( this.product.product.qty > 0 ) {
-				
-				
-					
-			
-				this.addToCart( { product: this.product } );
+			if ( this.product.stock > 0 ) {
+				let saledProduct = { ...this.product };
+				if ( this.product.is_sale ) {
+					saledProduct.price = this.product.sale_price;
+				}
+				this.addToCart( { product: saledProduct } );
 			}
 		}
 	}

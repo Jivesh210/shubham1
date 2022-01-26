@@ -392,7 +392,7 @@ export default {
 							producteditid: this.product.producteditid
 					};
 				}
-
+				console.log(saledProduct)
 				this.addToCart( { product: saledProduct } );
 			}
 		},

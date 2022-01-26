@@ -183,31 +183,64 @@
 			:class="{'row-sm sm-padding': itemsPerRow > 6}"
 			
 		>
-			<template v-if="product && product.length > 0">		
+			<!-- <template v-if="show">		
+				
 				<div
 					:class="gridCols[itemsPerRow]"
-					v-for="(pro,index) in product"
+					v-for="(pro,index) in product.slice(0,itemsPerPage)"
 					:key="'shop-product' + index"
 				>
+					
+					<template >
+						
+						<pv-product-one
+							
+							:product="pro"
+							:is-actions="false"
+							:brands="brand"
+							
+						></pv-product-one>
+						
+					</template>
+
+					
+				 <pv-product-two
+						
+						:product="pro"
+						v-else
+					></pv-product-two>
+				</div>
+			</template>  -->
+			<template >	
+				<div
+					:class="gridCols[itemsPerRow]"
+					v-for="(pro,index) in product.slice(totalCount*$route.query.page-totalCount,itemsPerPage*$route.query.page)"
+					:key="'shop-product' + index"
+				>
+					
 					<template v-if="type !== 'list'">
 						
 						<pv-product-one
-							v-if="product"
+							v-if="brand"
 							:product="pro"
 							:is-actions="false"
 							:brands="brand"
 							key="gridType"
 						></pv-product-one>
 						
+					
+						
 					</template>
 
 					<pv-product-two
-						
 						:product="pro"
 						v-else
-					>{{pro}}</pv-product-two>
-				</div>
+					></pv-product-two>
+					
+					
+					</div>
 			</template>
+
 
 			<template v-if="product && product.length === 0">
 				<div class="info-box with-icon p-0 shop-info">
@@ -236,8 +269,9 @@
 
 		<nav
 			class="toolbox toolbox-pagination"
-			v-if="product && product.length > 0"
+			v-if="product.length > 0"
 		>
+		
 			<div class="toolbox-item toolbox-show mb-0">
 				<label>Show:</label>
 
@@ -255,12 +289,11 @@
 					</select>
 				</div>
 			</div>
-
-			<pv-pagination
-				:total-count="totalCount"
+				<pv-pagination
+				:total-count="productlength"
 				:items-per-page="itemsPerPage"
-				v-if="totalCount"
 			></pv-pagination>
+			
 		</nav>
 
 		<div
@@ -275,7 +308,7 @@
 
 <script>
 import PvProductOne from '~/components/features/product/PvProductOne';//
-//import PvProductTwo from '~/components/features/product/PvProductTwo';
+import PvProductTwo from '~/components/features/product/PvProductTwo';
 import PvPagination from '~/components/features/PvPagination';
 import { scrollTopHandler } from '~/utils';
 import Api, { baseUrl, currentDemo } from '~/api';
@@ -283,12 +316,13 @@ import Api, { baseUrl, currentDemo } from '~/api';
 export default {
 	components: {
 		PvProductOne,
-		//PvProductTwo,
+		PvProductTwo,
 		PvPagination
 	},
 	props: {
 		product:Array,
 		brand: Array,
+		productlength:Number,
 		itemsPerRow: {
 			type: Number,
 			default: 4
@@ -296,6 +330,7 @@ export default {
 	},
 	data: function () {
 		return {
+			numb:8,
 			products:[],
 			brands:[],
 			repeatCount: new Array( 100 ),
@@ -310,6 +345,7 @@ export default {
 				type: Boolean,
 				default: false
 			},
+			show:true,
 			gridCols: {
 				1: 'col-12',
 				3: 'col-6 col-sm-4',
@@ -321,43 +357,47 @@ export default {
 			}
 		};
 	},
+	mounted: function () {
+			this.$route.query.page=1
+	},
 	watch: {
+		
 		$route: function () {
+		
 			this.itemsPerPage = this.$route.query[ 'per_page' ] ? parseInt( this.$route.query[ 'per_page' ] ) : 8;
 			this.getProducts();
 			this.isOffCanvas = this.$route.path.includes( 'off-canvas' )
 				? true
 				: false;
 			this.type = this.$route.path.includes( 'list' ) ? 'list' : 'grid';
+			if(this.$route.query.page >1){	
+				this.totalCount=this.itemsPerPage
+				this.show=false;
+
+				
+			}
 		}
 	},
 	created: function () {
+		
 		this.itemsPerPage = this.$route.query[ 'per_page' ] ? parseInt( this.$route.query[ 'per_page' ] ) : 8;
 		this.getProducts( false );
 		this.isOffCanvas = this.$route.path.includes( 'off-canvas' )
 			? true
 			: false;
 		this.type = this.$route.path.includes( 'list' ) ? 'list' : 'grid';
+		
 	},
 	methods: {
 		getProducts: function ( isScrll = true ) {
 		this.products=this.product,
-		this.totalCount =this.product.length;
-		this.brands= this.brand
-// axios.get(`${this.apiUrl}products`)
-//       .then(res => {
-//         //let datatatat = JSON.stringify(Object.assign({}, res.data));
-//         this.items = res.data.Data;
-//        // res.data.Data
-//         console.log(res.data.Data)
-//       })
 		
+		this.brands= this.brand
 		
 
-				// Api.get( `${ baseUrl }/product_show`)
+				// Api.get( `${ baseUrl }/product-show`)
 				// .then( response => {
-					
-					
+						
 				// 	this.products = response.data;
 					
 				// 	this.totalCount = response.data.length;
@@ -369,7 +409,9 @@ export default {
 			document.querySelector( 'body' ).classList.add( 'sidebar-opened' );
 		},
 		changePerPage: function () {
+			this.totalCount =this.itemsPerPage;
 			this.$router.push( { ...this.$route, query: { ...this.$route.query, per_page: this.itemsPerPage, page: 1 } } );
+			
 		}
 	}
 };

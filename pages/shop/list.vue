@@ -18,7 +18,7 @@
 			<div class="row">
 				<div class="col-lg-9 main-content">
 					<pv-product-list-one
-						:category-list="categoryList"
+					 :product="featuredProducts" :productlength="productlength"
 						:items-per-row="1"
 					></pv-product-list-one>
 				</div>
@@ -79,7 +79,8 @@ export default {
 		return {
 			categoryList: [],
 			featuredProducts: [],
-			isSticky: false
+			isSticky: false,
+			productlength:0
 		};
 	},
 	mounted: function () {
@@ -94,12 +95,13 @@ export default {
 	},
 	methods: {
 		getCategoryLists: function () {
-			Api.get( `${ baseUrl }/shop/sidebar-list`, {
+			Api.get( `${ baseUrl }/product-show`, {
 				params: { demo: currentDemo }
 			} )
 				.then( response => {
-					this.categoryList = response.data.sidebarList;
-					this.featuredProducts = response.data.featuredProducts;
+					this.featuredProducts= response.data.product;
+					this.brands= response.data.brand
+					this.productlength=this.featuredProducts.length
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
 		},

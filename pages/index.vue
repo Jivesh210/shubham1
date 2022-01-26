@@ -6,6 +6,7 @@
 			:products="products" 
 			:categories="category"
 			:brands="brands"
+
 		></pv-popular-collection>
 
 		<pv-special-collection :products="products" ></pv-special-collection>
@@ -60,7 +61,8 @@ export default {
 			bestProducts: [],
 			topRatedProducts: [],
 			timerId: 0,
-			brands:[]
+			brands:[],
+			
 
 		};
 	},
@@ -82,11 +84,16 @@ export default {
 		}
 	},
 	mounted: function () {
-		Api.get( `${ baseUrl }/product-show` )
+		Api.get( `${ baseUrl }/product-show`,{
+			params: {
+				mostallpopular:'mostallpopular'
+			}
+		} )
 			.then(response => {
 				
 			this.brands =response.data.brand	
 			this.products= response.data.product
+			
 				
 		})
 				// this.posts = response.data.posts;

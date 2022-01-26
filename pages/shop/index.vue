@@ -18,7 +18,7 @@
 
 			<div class="row">
 				<div class="col-lg-9 main-content">
-					<pv-product-list-one :product="featuredProducts" :brand="cat"> </pv-product-list-one>
+					<pv-product-list-one :product="featuredProducts" :brand="cat" :productlength="productlength"> </pv-product-list-one>
 				</div>
 
 				<div
@@ -72,7 +72,7 @@ export default {
 			featuredProducts: [],
 			cat:[],
 			brands:[],
-			
+			productlength:0,
 			isSticky: false
 		};
 	},
@@ -97,7 +97,7 @@ export default {
 
 					this.featuredProducts= response.data.product;
 					this.brands= response.data.brand
-					
+					this.productlength=this.featuredProducts.length
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
 		
