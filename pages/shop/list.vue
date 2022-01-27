@@ -11,7 +11,7 @@
 							<i class="icon-home"></i>
 						</nuxt-link>
 					</li>
-					<li class="breadcrumb-item active">Shoph</li>
+					<li class="breadcrumb-item active">Shop</li>
 				</ol>
 			</nav>
 
@@ -36,19 +36,10 @@
 						sticky-offset="{top: 75}"
 					>
 						<pv-sidebar-filter-one
-							:category-list="categoryList"
-							:featured-products="featuredProducts"
-							v-if="featuredProducts.length > 0"
+							:categoryList="categoryList"
+							:featuredProducts="featuredProducts"
+							:brands="brands"
 						></pv-sidebar-filter-one>
-
-						<div
-							class="sidebar-content skeleton-body"
-							v-else
-						>
-							<aside class="widget"></aside>
-							<aside class="widget"></aside>
-							<aside class="widget"></aside>
-						</div>
 					</div>
 				</aside>
 			</div>
@@ -80,7 +71,8 @@ export default {
 			categoryList: [],
 			featuredProducts: [],
 			isSticky: false,
-			productlength:0
+			productlength:0,
+			brands:[]
 		};
 	},
 	mounted: function () {
@@ -95,15 +87,22 @@ export default {
 	},
 	methods: {
 		getCategoryLists: function () {
-			Api.get( `${ baseUrl }/product-show`, {
-				params: { demo: currentDemo }
-			} )
+			Api.get( `${ baseUrl }/product-show` )
 				.then( response => {
 					this.featuredProducts= response.data.product;
 					this.brands= response.data.brand
 					this.productlength=this.featuredProducts.length
 				} )
 				.catch( error => ( { error: JSON.stringify( error ) } ) );
+				Api.get( `${ baseUrl }/category` )
+				.then( response => {
+
+					this.categoryList= response.data;
+					
+				} )
+				.catch( error => ( { error: JSON.stringify( error ) } ) );
+
+
 		},
 		resizeHandler: function () {
 			this.isSticky = window.innerWidth > 991 ? true : false;

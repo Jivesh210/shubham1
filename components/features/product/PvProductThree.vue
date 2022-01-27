@@ -192,7 +192,7 @@ export default {
 		openQuickview: function () {
 			this.$modal.show(
 				() => import( '~/components/features/product/PvQuickview' ),
-				{ slug: this.product.slug },
+				{ id: this.product[0].product.id },
 				{ width: '931', height: 'auto', adaptive: true, class: 'quickview-modal' }
 			);
 		},

@@ -5,7 +5,7 @@
 			class="toolbox sticky-header mobile-sticky"
 			data-start-top="500"
 			data-offset-top="56"
-			v-if="(!products) || ( products && products.length > 0 )"
+		
 			v-sticky
 		>
 			<div class="toolbox-left">
@@ -183,34 +183,6 @@
 			:class="{'row-sm sm-padding': itemsPerRow > 6}"
 			
 		>
-			<!-- <template v-if="show">		
-				
-				<div
-					:class="gridCols[itemsPerRow]"
-					v-for="(pro,index) in product.slice(0,itemsPerPage)"
-					:key="'shop-product' + index"
-				>
-					
-					<template >
-						
-						<pv-product-one
-							
-							:product="pro"
-							:is-actions="false"
-							:brands="brand"
-							
-						></pv-product-one>
-						
-					</template>
-
-					
-				 <pv-product-two
-						
-						:product="pro"
-						v-else
-					></pv-product-two>
-				</div>
-			</template>  -->
 			<template >	
 				<div
 					:class="gridCols[itemsPerRow]"
@@ -227,8 +199,6 @@
 							:brands="brand"
 							key="gridType"
 						></pv-product-one>
-						
-					
 						
 					</template>
 
@@ -266,7 +236,6 @@
 				</div>
 			</template>
 		</div>
-
 		<nav
 			class="toolbox toolbox-pagination"
 			v-if="product.length > 0"
@@ -343,7 +312,7 @@ export default {
 			},
 			isOffCanvas: {
 				type: Boolean,
-				default: false
+				default: true
 			},
 			show:true,
 			gridCols: {
@@ -372,8 +341,7 @@ export default {
 			this.type = this.$route.path.includes( 'list' ) ? 'list' : 'grid';
 			if(this.$route.query.page >1){	
 				this.totalCount=this.itemsPerPage
-				this.show=false;
-
+				this.show=false
 				
 			}
 		}
@@ -389,21 +357,12 @@ export default {
 		
 	},
 	methods: {
+		
 		getProducts: function ( isScrll = true ) {
 		this.products=this.product,
 		
 		this.brands= this.brand
 		
-
-				// Api.get( `${ baseUrl }/product-show`)
-				// .then( response => {
-						
-				// 	this.products = response.data;
-					
-				// 	this.totalCount = response.data.length;
-				// 	if ( isScrll ) scrollTopHandler();
-				// } )
-				// .catch( error => ( { error: JSON.stringify( error ) } ) );
 		},
 		showSidebarFilter: function () {
 			document.querySelector( 'body' ).classList.add( 'sidebar-opened' );

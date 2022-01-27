@@ -67,7 +67,7 @@
 						class="product-category"
 						v-for="(item, index) in productCategory"
 						:key="'product-category-' + index"
-						:to="{path: '/shop/cat/'+item.cat_name + '/'+item.id}"
+						:to="{path: '/shop/cat/'+item.cat_slug}"
 					>
 						{{ item.cat_name }}
 						<template v-if="index < productCategory.length - 1">,</template>

@@ -111,7 +111,7 @@
 					href="javascript:;"
 					class="btn-icon btn-add-cart product-type-simple"
 				
-					@click="addCart"
+					@click="addCart(product)"
 				>
 					<i class="icon-shopping-cart"></i>
 					<span>ADD TO CART</span>
@@ -140,7 +140,8 @@
 					href="javascript:;"
 					class="btn-quickview"
 					title="Quick View"
-					@click="openQuickview"
+					@click="openQuickview(product)"
+					key="singleCart"
 				>
 					<i class="fas fa-external-link-alt"></i>
 				</a>
@@ -164,7 +165,8 @@ export default {
 			minPrice: 0,
 			maxPrice: 0,
 			discount: 0,
-			backendUrl:backendUrl
+			backendUrl:backendUrl,
+			saledProduct:[],
 		};
 	},
 	computed: {
@@ -172,7 +174,7 @@ export default {
 		isWishlisted: function () {
 			if (
 				this.wishList.findIndex(
-					item => item.name === this.product.product.name
+					item => item.name === this.product.product.product_name
 				) > -1
 			)
 				return true;
@@ -180,6 +182,7 @@ export default {
 		}
 	},
 	mounted: function () {
+		
 		if ( this.product.product.is_sale && this.product.product.price ) {
 			this.discount =
 				( ( this.product.product.price - this.product.product.sale_price ) /
@@ -188,30 +191,32 @@ export default {
 			this.discount = parseInt( this.discount );
 		}
 
-		// if ( !this.product.product.price ) {
-		// 	this.minPrice = this.product.product.price;
-		// 	this.product.product.forEach( item => {
-		// 		let itemPrice = item.is_sale ? item.sale_price : item.price;
-		// 		if ( this.minPrice > itemPrice ) this.minPrice = itemPrice;
-		// 		if ( this.maxPrice < itemPrice ) this.maxPrice = itemPrice;
-		// 	} );
-		// }
 	},
 	methods: {
 		...mapActions( 'wishlist', [ 'addToWishlist' ] ),
 		...mapActions( 'cart', [ 'addToCart' ] ),
-		openQuickview: function () {
+		openQuickview: function (event) {
 			this.$modal.show(
 				() => import( '~/components/features/product/PvQuickview' ),
-				{ slug: this.product.product.slug },
-				{ width: '931', height: 'auto', adaptive: true, class: 'quickview-modal' }
+				{ id: event.product.id },
+				{ width: '931',  height:'auto',adaptive:true, class: 'quickview-modal' }
 			);
 		},
 		addWishlist: function ( e ) {
 			e.currentTarget.classList.add( 'load-more-overlay', 'loading' );
 
 			setTimeout( () => {
-				this.addToWishlist( { product: this.product } );
+				let saledProduct;
+				saledProduct = {
+						...this.product,
+						qty: this.product.qty,
+						name:this.product.product.product_name,
+						price: this.product.product.pricesale
+							? this.product.product.pricesale
+							: this.product.product.price,
+							producteditid: this.product.product.id
+					};
+				this.addToWishlist( { product: saledProduct } );
 				document
 					.querySelector( '.wishlist-popup' )
 					.classList.add( 'active' );
@@ -223,15 +228,20 @@ export default {
 				}, 1000 );
 			}, 1000 );
 		},
-		addCart: function () {
-			
-			if ( this.product.product.qty > 0 ) {
-				
-				
-					
-			
-				this.addToCart( { product: this.product } );
-			}
+		addCart (event) {
+				let saledProduct;
+				saledProduct = {
+						...event,
+						qty: event.qty,
+						name:event.product.product_name,
+						price: event.product.pricesale
+							? event.product.pricesale
+							: event.product.price,
+							producteditid: event.product.id
+					};
+
+				this.addToCart( { product: saledProduct } );
+
 		}
 	}
 };

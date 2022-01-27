@@ -28,7 +28,7 @@
 
 				<div class="dropdownmenu-wrapper custom-scrollbar">
 					<div class="dropdown-cart-header">Shopping Cart</div>
-
+						
 					<template v-if="cartList.length > 0">
 						<div class="dropdown-cart-products">
 							<div
@@ -43,10 +43,15 @@
 										<nuxt-link v-else :to="'/product/' + product.product.slug">{{ product.product.product_name }}</nuxt-link>
 									</h4>
 
-									<span class="cart-product-info">
+									<span class="cart-product-info" v-if="product.product">
 									
 										<span class="cart-product-qty">{{ product.qty }}</span>
 										× ${{ product.product.price | priceFormat }}
+									</span>
+									<span class="cart-product-info" v-else>
+									
+										<span class="cart-product-qty">{{ product.qty }}</span>
+										× ${{ product.price | priceFormat }}
 									</span>
 								</div>
 

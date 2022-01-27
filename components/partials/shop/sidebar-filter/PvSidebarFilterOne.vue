@@ -151,12 +151,15 @@
 
 			<div class="widget-body">
 				<div class="featured-col">
+					
 					<pv-small-product
 						v-for="(product,index) in featuredProducts"
 						:key="'featured' + index"
 						:is-lazy="false"
 						:product="product"		
-					></pv-small-product>
+					>
+					
+					</pv-small-product>
 				</div>
 					
 			</div>

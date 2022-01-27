@@ -1,5 +1,5 @@
 <template>
-	<div class="product-single-container product-single-default product-quick-view mb-0 custom-scrollbar skeleton-body">
+	<div class="product-single-container product-single-default ">
 		<div
 			class="quickview-wrap product"
 			v-if="!product"
@@ -17,6 +17,7 @@
 			<div class="col-md-6 product-single-gallery mb-md-0">
 				<pv-media-one
 					:product="product"
+					:productGallery="productGalleryInfo"
 					:is-magnify="false"
 				></pv-media-one>
 			</div>
@@ -55,6 +56,7 @@ export default {
 	},
 	data: function () {
 		return {
+				productGalleryInfo:[],
 		productBrandInfo: [],
 		product:{
 				producteditid:"",
@@ -99,7 +101,7 @@ export default {
 		getProduct: function () {
 			Api.get( `${ baseUrl }/search-products`, {
 			params: {
-				default_search_term: this.id
+				default_search_termbyid: this.id
 			}	
 			}).then( response => {
 				response.data.product.forEach((value) => {
@@ -131,8 +133,3 @@ export default {
 	}
 }
 </script>
-<style >
-.skeleton-body{
-		height:599px !important;
-}
-</style>

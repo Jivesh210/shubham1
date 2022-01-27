@@ -12,7 +12,7 @@
 			<div class="minipopup-box">
 				<div class="product">
 					<figure class="product-media">
-						<nuxt-link :to="'/product/default' + props.item.data.slug">
+						<nuxt-link :to="'/product/' + props.item.data.slug">
 							<img 
 							v-if="props.item.data.productfeatureimage"
 								:src="`${backendUrl}${props.item.data.productfeatureimage}`" 
@@ -31,10 +31,10 @@
 					</figure>
 
 					<div class="product-detail">
-						<nuxt-link v-if="props.item.data.productname" :to="'/product/default/' + props.item.data.slug" class="product-name">
+						<nuxt-link v-if="props.item.data.productname" :to="'/product/' + props.item.data.slug" class="product-name">
 							{{ props.item.data.productname }}
 						</nuxt-link>
-						<nuxt-link v-else :to="'/product/default/' + props.item.data.product.slug" class="product-name">
+						<nuxt-link v-else :to="'/product/' + props.item.data.product.slug" class="product-name">
 							{{ props.item.data.product.product_name }}
 						</nuxt-link>
 
