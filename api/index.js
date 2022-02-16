@@ -13,6 +13,8 @@ export const baseUrl = `${ baseDonmain }`;
 
 export const backendUrl = `${ backendDomain }`;
 
+export const loginUser = (localStorage.getItem('userData') != null) ? JSON.parse(localStorage.getItem('userData')) : ''; 
+
 export const currentDemo = 35;
 
 export default axios.create( {

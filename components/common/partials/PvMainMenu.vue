@@ -1,6 +1,6 @@
 <template>
 	<nav class="main-nav d-flex font2">
-		<div class="menu-depart" >
+		<!-- <div class="menu-depart" >
 			<nuxt-link to="/"><i class="fa fa-bars align-middle mr-3"></i>All
 				Departments</nuxt-link>
 			<ul class="menu menu-vertical">
@@ -31,18 +31,25 @@
 				</li>
         
 			</ul>
-		</div>
+		</div> -->
 	
         <ul class="menu main-menu menu-arrow">
-			<li>
+			<li v-for="name in menuList" :key="name.id">
 				<nuxt-link
-					to="/"
+					:to="name.slug"
 					class="sub-menu-link menu-with-ul"
-					:class="{active: $route.path.indexOf('/page') > -1}"
-				>Flyers & Deals</nuxt-link>
+				>{{ name.menu_name }}</nuxt-link>
+				<ul class="menu menu-vertical" v-if="name.childmenu != ''">
+				<li v-for="submenu in name.childmenu" :key="submenu.id"  >
+					<a :href="submenu.slug" ><i class="icon-category-food"></i>{{submenu.menu_name}}</a>
+					<span class="menu-btn" ></span>
+					
+				</li>
+        
+			</ul>
 			</li>
 
-			<li>
+			<!-- <li>
 				<nuxt-link
 					to="/shop"
 					class="sub-menu-link menu-with-ul"
@@ -55,14 +62,14 @@
 					to="/shop/brand/"
 					:class="{active: $route.path.indexOf('/shop/brand/') <-1 }"
 				>Brands</nuxt-link>
-			</li>
+			</li> -->
 		</ul>
 	</nav>
 </template>
 <script>
 import PvCarousel from '~/components/features/PvCarousel';
 import PvCountDown from '~/components/features/PvCountDown';
-import Api, { baseUrl, currentDemo } from '~/api';
+import Api, { baseUrl } from '/api';
 
 export default {
 	components: {
@@ -72,13 +79,16 @@ export default {
 	data: function () {
 		return {
 			mainMenu: [],
+			menuList:[],
 			menuOneSlider: [],
 			nav:false,
 			submenu:[],
+			 // :[],
 		};
 	},
 	mounted: function () {
 		this.getcategories();
+		this.getMenus();
 		
 	},
 	computed: {
@@ -97,7 +107,16 @@ export default {
 		}
 	},
 	methods: {
-	getcategories(){
+		getMenus(){
+				
+				Api.get( `${ baseUrl }/menu` )
+							.then( response => {
+								this.menuList = response.data
+								console.log(this.menuList);
+
+							})
+		},
+		getcategories(){
 				
 				Api.get( `${ baseUrl }/search-category` )
 							.then( response => {
