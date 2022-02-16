@@ -110,7 +110,7 @@
 							class="w-100"
 						/>-->
                         <img class="logo-main"
-							src="~/static/images/shubnam.png"
+							:src="settingData.logo"
 							alt="Porto Logo"
 							
 						/>
@@ -118,7 +118,7 @@
 
 					<pv-header-search></pv-header-search>
 				</div>
-
+{{settingData.storeName }}
 				<div class="header-right">
 					<nuxt-link
 						to="/pages/wishlist"
@@ -135,11 +135,14 @@
 							title="login"
 						><i class="icon-user-2 mr-2"></i></nuxt-link>
 						<h6 class="font1 d-none d-lg-block mb-0"><span class="d-block text-body">Welcome</span>
-							<nuxt-link
+							<nuxt-link v-if="userData.name == ''"
 								to="/pages/login"
 								class="font-weight-bold"
-							>Sign In
-								/ Register</nuxt-link>
+							>Sign In / Register</nuxt-link>
+							<nuxt-link v-else
+								to="/pages/account"
+								class="font-weight-bold"
+							>{{ userData.name }}</nuxt-link>
 						</h6>
 					</div>
 
@@ -171,6 +174,8 @@
 </template>
 
 <script>
+import { loginUser } from '/api';
+import Api, { baseUrl } from '/api';
 import { mapGetters } from 'vuex';
 import PvMainMenu from '~/components/common/partials/PvMainMenu';
 import PvCartMenu from '~/components/common/partials/PvCartMenu';
@@ -184,8 +189,35 @@ export default {
 		PvCartMenu,
 		PvHeaderSearch
 	},
+	data() {
+    return {
+		userData: {
+        	name: '',
+     	},
+		settingData: {
+        	logo: '',
+        	storeName: '',
+			bgColor:'',
+     	},
+
+		
+	}
+	},
 	computed: {
 		...mapGetters( 'wishlist', [ 'wishList' ] )
+	},
+	cssVars() {
+		alert(this.settingData.bgColor);
+      return {
+        '--bgColor': this.settingData.bgColor,
+      }
+    },
+	mounted: function (){
+
+		if(loginUser.name){
+		this.userData.name = loginUser.name;
+		}
+		this.getSetting();
 	},
 	methods: {
 		openLoginModal: function () {
@@ -204,7 +236,37 @@ export default {
 			headerSearch
 				.querySelector( '.header-search-wrapper' )
 				.classList.add( 'show' );
-		}
+		},
+		getSetting: function(){
+			Api.get( `${ baseUrl }/setting`)
+			.then(response => {
+				this.settingData.storeName = response.data.storeName;
+				//this.settingData.logo = response.data.logo;
+
+				console.log(response.data)
+
+				response.data.setting.forEach((value) => {
+					
+					if(value.setting_key == "storeName"){
+						this.settingData.storeName = value.setting_value;
+					}
+					if(value.setting_key == "logo"){
+						this.settingData.logo = value.setting_value;
+					}
+					if(value.setting_key == "bgColor"){
+						this.settingData.bgColor = value.setting_value;
+						
+						//alert(this.settingData.bgColor);
+					}
+					
+				
+
+				});
+
+			})
+	
+			
+		},
 	}
 };
 </script>

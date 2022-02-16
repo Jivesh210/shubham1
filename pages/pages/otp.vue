@@ -24,7 +24,7 @@
 
 				<h1>My Account</h1>
 			</div>
-		</div>
+		</div>	
 
 		<div class="container login-container">
 			<div class="row">
@@ -34,26 +34,17 @@
 							<div class="heading mb-1">
 								<h2 class="title">Register with OTP</h2>
 							</div>
-						<validation-observer ref="mobile">
 							<b-form action="#" @submit.prevent="sendOtp" v-if="enterOtp == 0">
 								<label for="mobile-number">
 									Enter Mobile No.
 									<span class="required">*</span>
 								</label>
-								<validation-provider
-									#default="{ errors }"
-									name="Mobile No."
-									rules="required"
-								>
 								<b-form-input
 									type="text"
 									class="form-input form-wide"
 									id="phone"
 									v-model="phoneNumber"
 								/>
-								<small class="text-danger">{{ errors[0] }}</small>
-
-								</validation-provider>
 								<div class="form-footer mb-2">
 									<b-button
 										type="submit"
@@ -61,27 +52,18 @@
 									>Send OTP</b-button>
 								</div>
 							</b-form>
-						</validation-observer>
 							<div id="recaptcha-container"></div>
-						<validation-observer>
 							<form action="#" v-if="enterOtp == 1">
 								<label for="register-email">
 									Enter OTP
 									<span class="required">*</span>
 								</label>
-								<validation-provider
-									#default="{ errors }"
-									name="Mobile No."
-									rules="required"
-								>
 								<b-form-input
 									type="text"
 									class="form-input form-wide"
 									id="phone"
 									v-model="otp"
 								/>
-								<small class="text-danger">{{ errors[0] }}</small><small class="text-danger">{{ errors[0] }}</small><small class="text-danger">{{ errors[0] }}</small>
-								</validation-provider>
 								<div class="form-footer mb-2">
 									<b-button
 										type="button"
@@ -90,7 +72,6 @@
 									>Verify</b-button>
 								</div>
 							</form>
-						</validation-observer>
 						</div>
 					</div>
 				</div>
@@ -105,24 +86,16 @@ import {
 } from 'bootstrap-vue'
 import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import Api, { baseUrl } from '~/api';
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
-import {
-  required,
-} from 'vuelidate/lib/validators'
+
 
 export default {
-plugins: ['~/plugins/vuelidate'],
 components:{
 	BForm,
 	BButton,
 	BFormInput,
-	ValidationProvider,
-	ValidationObserver
 },
   data() {
     return {
-	// v$: useValidate(),
-	  required,
       phoneNumber: '',
       appverify: '',
       auth: '',
@@ -145,7 +118,7 @@ components:{
   },
   methods: {
       sendOtp(){
-		  const val = this.phoneNumber.validate({ params, query, store });
+		//   const val = this.phoneNumber.validate({ params, query, store });
 
 		var phonewithcountry = '+91'+this.phoneNumber
 		signInWithPhoneNumber(this.auth, phonewithcountry, this.appverify)
@@ -162,9 +135,11 @@ components:{
 			}).catch((error) => {
 			// Error; SMS not sent
 			// ...
+			console.log(error);
 			});
 
       },
+	  
 	  verifyOtp(){
 			const code = this.otp;
 			this.confirmationResult.confirm(code).then((result) => {
@@ -174,12 +149,25 @@ components:{
 			Api.post( `${ baseUrl }/register-otp`, {
 				type: 'phone',
 				uid: user.uid,
-				phone: user.phoneNumber
+				phone: user.phoneNumber,
+		
             }).then(res => {
 				console.log(res.data)
 				localStorage.setItem('userData', JSON.stringify(res.data.user))
-                this.$ability.update(res.data.user.ability)
-				this.$router.push('/')
+				localStorage.setItem('userAccessToken', JSON.stringify(res.data.access_token))
+				let data = JSON.parse(localStorage.getItem('userData'));
+	//			console.log(data);
+	
+				if(data.status == 0 || data.status ==  '0'){
+					
+					this.$router.push('/pages/register-confirmation')
+				}else{
+				
+					this.$router.push('/pages/account')
+				}
+                //this.$ability.update(res.data.user.ability)
+				
+				
 			})
 
 			console.log(user);

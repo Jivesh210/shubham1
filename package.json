@@ -43,6 +43,7 @@
         "vue-range-slider": "^0.6.0",
         "vue-slide-toggle": "^1.1.1",
         "vue-sticky-directive": "0.0.10",
+        "vue-sweetalert2": "^5.0.2",
         "vue-tree-list": "^1.5.0",
         "vue2-google-maps": "^0.10.7",
         "vueisotope": "^3.1.2",

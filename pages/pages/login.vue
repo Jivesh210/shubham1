@@ -112,7 +112,10 @@
 
 <script>
 import Api, { baseUrl } from '/api';
-
+import Vue from 'vue';
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+Vue.use(VueSweetalert2);
 export default {
 
   data() {
@@ -120,8 +123,18 @@ export default {
       status: '',
       password: '',
       userEmail: '',
+	  access_token:'',
 
     }
+  },
+  mounted: function () {
+  		let userAccessToken = JSON.parse(localStorage.getItem('userAccessToken'));
+		this.access_token = (userAccessToken) ? userAccessToken : '';
+
+		if(this.access_token != ''){
+			this.$router.push('/pages/account')
+			
+		}
   },
   methods: {
     login() {
@@ -134,7 +147,9 @@ export default {
             .then(response => {
                 console.log(response.data)
                 //   useJwt.setToken(response.data.access_token)
-                  localStorage.setItem('userData', JSON.stringify(response.data.user))
+                  localStorage.setItem('userData', JSON.stringify(response.data.user_data))
+				  localStorage.setItem('userAccessToken', JSON.stringify(response.data.access_token))
+				  this.$router.push('/pages/account')
                 //   this.$ability.update(response.data.user_data.ability)
                   // ? This is just for demo purpose as well.
                   // ? Because we are showing eCommerce app's cart items count in navbar
@@ -143,15 +158,30 @@ export default {
                   // ? This is just for demo purpose. Don't think CASL is role based in this case, we used role in if condition just for ease
                 //   this.$router.push('/')
                   // this.$router.replace(getHomeRouteForLoggedInUser(response.data.user_data.role))
-                    .then(() => {
+                 //   .then(() => {
 
-                    })
+                 //   })
             })
             .catch(error => {
-            //   this.$refs.loginForm.setErrors(error.response.data.message)
+				console.log(error)
+				this.autoClose('Email or Password is Invalid');
+               //this.$refs.loginForm.setErrors(error.response.data.message)
+		
             })
         // }
     //   })
+    },
+	autoClose(name) {
+      this.$swal({
+        title: '',
+        icon: 'info',
+        html: name,
+        timer: 5000,
+        customClass: {
+          confirmButton: 'btn btn-success',
+        },
+        buttonsStyling: false,
+      })
     },
   },
 }

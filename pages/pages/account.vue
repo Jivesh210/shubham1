@@ -109,7 +109,7 @@
 								</li>
 
 								<li>
-									<nuxt-link to="/">Logout</nuxt-link>
+									<a href="javascript:void(0);" @click="logoutAccount()">Logout</a>
 								</li>
 
 								<li class="nav-item d-none">
@@ -152,10 +152,7 @@
 								Hello
 								<strong class="text-dark">Editor</strong> (not
 								<strong class="text-dark">Editor</strong>?
-								<nuxt-link
-									to="/pages/login"
-									class="btn btn-link"
-								>Log out</nuxt-link>)
+								<a href="javascript:void(0);" @click="logoutAccount()">Log out</a>
 							</p>
 
 							<p>
@@ -267,7 +264,7 @@
 								</div>
 
 								<div class="col-6 col-md-4">
-									<div class="feature-box text-center pb-4">
+									<div class="feature-box text-center pb-4" @click="logoutAccount()">
 										<nuxt-link to="/">
 											<i class="sicon-logout"></i>
 										</nuxt-link>
@@ -822,6 +819,7 @@
 <script>
 import PvTabs from '~/components/features/PvTabs';
 import Sticky from 'vue-sticky-directive';
+import { loginUser } from '/api';
 
 export default {
 	directives: {
@@ -832,7 +830,11 @@ export default {
 	},
 	data: function () {
 		return {
-			isSticky: false
+			isSticky: false,
+			access_token:'no',
+			userData: {
+				name: '',
+			},
 		};
 	},
 	mounted: function () {
@@ -840,6 +842,18 @@ export default {
 		window.addEventListener( 'resize', this.resizeHandler, {
 			passive: true
 		} );
+
+		 let data = JSON.parse(localStorage.getItem('userData'));
+		 let userAccessToken = JSON.parse(localStorage.getItem('userAccessToken'));
+		 this.access_token = (userAccessToken) ? userAccessToken : '';
+
+		 if(this.access_token == 'no' || this.access_token == ''){
+		 	this.$router.push('/pages/login')
+			
+		 }else{
+		 	this.userData.name = (data.name) ? data.name : '';
+			
+		 }
 	},
 	destroyed: function () {
 		window.removeEventListener( 'resize', this.resizeHandler );
@@ -862,7 +876,12 @@ export default {
 		},
 		resizeHandler: function () {
 			this.isSticky = window.innerWidth > 991 ? true : false;
-		}
+		},
+		logoutAccount: function() {
+			localStorage.removeItem("userAccessToken");
+			localStorage.removeItem("userData");
+			this.$router.push('/')
+		},
 	}
 };
 </script>
