@@ -11,7 +11,7 @@
 						<div class="row">
 							<div class="col-md-12">
 								<div class="row">
-									<div class="col-md-2 mb-1" v-for="child_cat,index in menuOneSlider" :key="index">	
+									<div class="col-md-2 mb-1" v-for="child_cat,index in menuOneSlider" :key="index">					
 										<nuxt-link to="/shop"	
 											class="nolink pl-0"
 										> {{child_cat.cat_name}} </nuxt-link>
@@ -106,7 +106,6 @@ export default {
 							})
 		},
 		getchild_categories(id){
-	
 			Api.get( `${ baseUrl }/child-category/`+id )
 							.then( response => {
 								this.menuOneSlider = response.data

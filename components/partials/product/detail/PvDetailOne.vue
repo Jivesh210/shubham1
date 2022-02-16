@@ -1,6 +1,5 @@
 <template>
 	<div>
-		
 		<h1 class="product-title">{{ product.productname }}</h1>
 		<div class="ratings-container">
 			<div class="product-ratings">
